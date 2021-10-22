@@ -1,0 +1,94 @@
+### Introductory Econometrics - Exercise Session 1
+
+## Data File: WAGE2.csv
+
+## Import File
+#WAGE2 <- read.csv(" Enter Path File Here ") or import manually
+
+## Summary of a variable
+wage <- WAGE2$wage
+wage_summary <- summary(wage)
+wage_summary
+
+## Counting Values
+# Count "wage" (Result: 935) 
+length(wage) 
+# Count "wage" if "educ == 12" (Result: 393)
+length(wage[educ==12])
+# Count "wage" if "educ == 16" (Result: 150)
+length(wage[educ==16])
+# Count "wage" if "educ == 9"  (Result: 10)
+length(wage[educ==9])
+
+## Percentiles
+quantile(wage,probs=seq(0,1,by=0.1)) 
+# here i created a vector, with the probabilities from 0 to 1 in steps of 0.1 (or 10%). 
+# If you want other specific percentiles you just have to change the probabilities
+# example with other probabilities, e.g.: 20% steps
+# quantile(wage,probs=seq(0,1,by=0.2))
+
+## Create a Histogram of "wage"
+hist(wage)
+
+## Average wage of married/unmarried people
+married <- WAGE2$married
+mean(wage[married==1])
+mean(wage[married==0])
+
+## Generate Two Way Graphs (X-Y-Plot)
+# Scatter Plot
+iq <- WAGE2$IQ
+plot(iq,wage)
+
+educ <- WAGE2$educ
+plot(educ,wage)
+
+## Correlation
+# Simple Correlation Coefficient of x = "Wage" and y = "IQ"
+cor(wage,iq)
+# Or: A bit more detailed info
+cor.test(wage,iq)
+
+## Correlation Matrix for "wage","iq","educ","meduc" and "feduc"
+meduc <- WAGE2$meduc
+feduc <- WAGE2$feduc
+
+# At first you have to create a dataframe, on which the correlation calculation can be done
+corr_tab <- subset(WAGE2,select=c(wage,IQ,educ,meduc,feduc))
+# Secondly we calculate the correlations for this dataframe
+# Note: we have to add the method "use = complete.obs", because we have some "NA"s in our data
+corr_matrix <- cor(corr_tab,use = "complete.obs")
+corr_matrix
+
+## Heatmap
+# You need to installt the neccessary package
+install.packages("corrplot")
+library(corrplot)
+corrplot(corr_matrix, method="color", cl.pos="b", type="lower", diag=FALSE)
+
+## Boxplots
+# Simple Box Plot of "wage"
+boxplot(wage)
+
+## Multiple Box Plots
+# "wage" over "urban"
+urban <- WAGE2$urban
+boxplot(wage~urban)
+
+# "wage" over "black"
+black <- WAGE2$black
+boxplot(wage~black)
+
+# "educ" over "black"
+boxplot(educ~black)
+
+# "wage" over "educ"
+boxplot(wage~educ)
+
+## Fraction of people in the sample, that have a wage below or equal to 900 (Result ~49%)
+length(wage[wage<=900])/length(wage)
+
+## Square of "age"
+age <- WAGE2$age
+exper <- WAGE2$exper
+age2 <- age**2 # ** instead of ^
